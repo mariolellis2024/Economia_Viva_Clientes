@@ -178,7 +178,7 @@ td.name{color:var(--text);font-weight:600;white-space:nowrap}
         <!-- STATS -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">Total de leads</div>
+                <div class="stat-label">Total de negócios</div>
                 <div class="stat-value" id="statTotal">—</div>
             </div>
             <div class="stat-card">
@@ -343,10 +343,10 @@ function getFiltered(){
 // -- RENDER --
 function renderTable(){
     const filtered = getFiltered();
-    document.getElementById('countBadge').textContent = `Exibindo ${filtered.length} de ${allLeads.length} leads`;
+    document.getElementById('countBadge').textContent = `Exibindo ${filtered.length} de ${allLeads.length} negócios`;
     const tbody = document.getElementById('tableBody');
     if(!filtered.length){
-        tbody.innerHTML = `<tr><td colspan="12"><div class="empty-state"><i data-lucide="inbox"></i><p>Nenhum lead encontrado</p></div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12"><div class="empty-state"><i data-lucide="inbox"></i><p>Nenhum negócio encontrado</p></div></td></tr>`;
         lucide.createIcons({nodes:[tbody]});
         return;
     }
