@@ -19,14 +19,19 @@ app.get('/results', (req, res) => res.sendFile(path.join(__dirname, 'admin.html'
 app.use(express.static(path.join(__dirname)));
 
 // --- Init DB ---
-async function initDB() {
+async function initDB(retries = 10) {
   const sql = fs.readFileSync(path.join(__dirname, 'init.sql'), 'utf8');
-  try {
-    await pool.query(sql);
-    console.log('✅ Database initialized');
-  } catch (err) {
-    console.error('❌ DB init error:', err.message);
+  for (let i = 1; i <= retries; i++) {
+    try {
+      await pool.query(sql);
+      console.log('✅ Database initialized');
+      return;
+    } catch (err) {
+      console.error(`❌ DB init attempt ${i}/${retries}:`, err.message);
+      if (i < retries) await new Promise(r => setTimeout(r, 3000));
+    }
   }
+  console.error('❌ Could not connect to DB after all retries');
 }
 
 // --- Auth middleware for admin routes ---
