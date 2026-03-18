@@ -458,11 +458,14 @@ function submitForm(e){
     })
     .then(r=>{if(!r.ok)throw new Error('Erro');return r.json();})
     .then(()=>{
-        btn.classList.remove('loading');
         fireLeadConversion(quizData.contact);
-        const f=document.getElementById('screen-form');
-        f.classList.add('exiting');
-        setTimeout(()=>{f.classList.remove('active','exiting');showScreen('screen-confirmation');},250);
+        btn.querySelector('.btn-text').textContent='Processando...';
+        setTimeout(()=>{
+            btn.classList.remove('loading');
+            const f=document.getElementById('screen-form');
+            f.classList.add('exiting');
+            setTimeout(()=>{f.classList.remove('active','exiting');showScreen('screen-confirmation');},250);
+        },3000);
     })
     .catch(()=>{
         btn.classList.remove('loading');btn.disabled=false;
