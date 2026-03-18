@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pré-Aplicação — 1000 Empresas | Economia Viva</title>
+    <meta name="description" content="A Economia Viva está selecionando 1.000 empresas para receber orientação gratuita. Faça sua pré-aplicação agora.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg-body:#f9f7f2;--bg-white:#ffffff;--bg-hero:#b89009;--bg-hero-dark:#9a7808;
+--accent:#b89009;--accent-dark:#9a7808;--accent-light:#d4a916;--accent-bg:rgba(184,144,9,0.08);--accent-bg-strong:rgba(184,144,9,0.15);
+--text-dark:#1a1a1a;--text-body:#3d3d3d;--text-secondary:#656a6e;--text-muted:#999;
+--text-on-dark:#ffffff;--text-on-dark-muted:rgba(255,255,255,0.82);
+--success:#2b8a33;--border:rgba(0,0,0,0.08);
+--shadow-md:0 4px 16px rgba(0,0,0,0.08);--shadow-sm:0 1px 3px rgba(0,0,0,0.06);
+--shadow-accent:0 4px 20px rgba(184,144,9,0.35);
+--radius:16px;--radius-sm:12px;--radius-xs:8px;--font:'Inter',sans-serif;
+}
+html{font-size:16px;overflow:hidden;height:100dvh}
+body{font-family:var(--font);background:var(--bg-body);color:var(--text-body);height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased}
+.quiz-container{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.hero-section{background:linear-gradient(135deg,var(--bg-hero),var(--bg-hero-dark));padding:6px 20px;text-align:center;position:relative;overflow:hidden}
+.hero-section::before{content:'';position:absolute;top:-50%;right:-30%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none}
+.hero-logo{height:24px;width:auto;position:relative;display:block;margin:0 auto}
+.hero-tagline{font-size:.72rem;color:var(--text-on-dark-muted);font-weight:400;position:relative;margin-top:3px}
+.progress-container{background:var(--bg-white);padding:0 20px;border-bottom:1px solid var(--border);opacity:0;max-height:0;overflow:hidden;transition:all .4s ease}
+.progress-container.visible{opacity:1;max-height:60px;padding:8px 20px}
+.progress-info{display:flex;justify-content:space-between;margin-bottom:8px;font-size:.72rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.progress-step{color:var(--accent-dark);font-weight:700}
+.progress-bar{height:5px;background:var(--bg-body);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:100px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.content-area{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 20px 12px;overflow-y:auto;min-height:0}
+.content-wrapper{width:100%;max-width:580px}
+.screen{display:none;animation:fadeIn .45s ease forwards}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.screen.exiting{animation:fadeOut .25s ease forwards}
+@keyframes fadeOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-12px)}}
+
+/* WELCOME */
+.welcome-card{background:var(--bg-white);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden}
+.welcome-header{background:linear-gradient(135deg,var(--bg-hero),var(--bg-hero-dark));padding:18px 22px 16px;text-align:center;position:relative;overflow:hidden}
+.welcome-header::before{content:'';position:absolute;top:-40%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%);border-radius:50%}
+.welcome-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:100px;font-size:.65rem;font-weight:700;color:#fff;margin-bottom:10px;text-transform:uppercase;letter-spacing:1.2px;position:relative}
+.welcome-badge i{width:12px;height:12px}
+.welcome-title{font-size:clamp(1.2rem,3.5vw,1.55rem);font-weight:800;line-height:1.2;color:var(--text-on-dark);margin-bottom:8px;position:relative}
+.welcome-title .hl{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.15)}
+.welcome-subtitle{font-size:.82rem;line-height:1.5;color:var(--text-on-dark-muted);position:relative}
+.welcome-subtitle strong{color:#fff;font-weight:600}
+.methodology-section{padding:14px 22px;border-bottom:1px solid var(--border)}
+.methodology-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-dark);margin-bottom:6px}
+.methodology-text{font-size:.8rem;line-height:1.55;color:var(--text-body)}
+.methodology-text strong{color:var(--text-dark);font-weight:700}
+.proof-section{padding:10px 22px;background:var(--bg-body);display:flex;gap:8px;flex-wrap:wrap}
+.proof-badge{display:flex;align-items:center;gap:6px;padding:5px 10px;background:var(--bg-white);border:1px solid var(--border);border-radius:100px;font-size:.68rem;font-weight:600;color:var(--text-secondary)}
+.proof-badge i{width:13px;height:13px;color:var(--accent)}
+.benefits-section{padding:14px 22px}
+.benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.benefit-card{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--accent-bg);border-radius:var(--radius-xs);border:1px solid rgba(184,144,9,0.12)}
+.benefit-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--accent);border-radius:50%;flex-shrink:0;color:#fff}
+.benefit-icon i{width:14px;height:14px}
+.benefit-text{font-size:.75rem;font-weight:600;color:var(--text-dark);line-height:1.3}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 28px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s ease;text-transform:uppercase;letter-spacing:1px;box-shadow:var(--shadow-accent)}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-2px);box-shadow:0 6px 28px rgba(184,144,9,0.35)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary i{width:18px;height:18px;transition:transform .3s ease}
+.btn-primary:hover i{transform:translateX(4px)}
+.time-hint{text-align:center;margin-top:8px;font-size:.72rem;color:var(--text-muted);font-weight:500;display:flex;align-items:center;justify-content:center;gap:5px}
+.time-hint i{width:12px;height:12px}
+.spots-counter{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(184,144,9,0.06);border:1px solid rgba(184,144,9,0.15);border-radius:100px;font-size:.68rem;font-weight:600;color:var(--text-dark);margin-top:8px}
+.spots-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.5s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* QUESTIONS */
+.question-card{background:var(--bg-white);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:22px 22px}
+.question-number{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent-dark);margin-bottom:6px}
+.question-title{font-size:clamp(1rem,3vw,1.2rem);font-weight:700;line-height:1.35;margin-bottom:16px;color:var(--text-dark)}
+.options-grid{display:flex;flex-direction:column;gap:6px}
+.option-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;background:var(--bg-body);border:2px solid transparent;border-radius:var(--radius-sm);font-family:var(--font);font-size:.84rem;font-weight:500;color:var(--text-body);cursor:pointer;text-align:left;transition:all .25s ease}
+.option-btn:hover{background:var(--accent-bg);border-color:rgba(184,144,9,0.3);transform:translateX(4px)}
+.option-btn.selected{background:var(--accent-bg-strong);border-color:var(--accent);color:var(--text-dark);font-weight:600}
+.option-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--bg-white);border-radius:50%;flex-shrink:0;box-shadow:var(--shadow-sm);color:var(--accent-dark)}
+.option-icon i{width:16px;height:16px}
+.option-btn.selected .option-icon{background:var(--accent);color:#fff;box-shadow:var(--shadow-accent)}
+.option-text{flex:1}
+
+/* TRANSITION */
+.transition-message{display:none;text-align:center;padding:48px 24px}
+.transition-message.active{display:block}
+.transition-icon{width:56px;height:56px;margin:0 auto 16px;background:var(--accent-bg-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent-dark);animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+.transition-icon i{width:28px;height:28px}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.transition-text{font-size:1.05rem;line-height:1.65;color:var(--text-secondary);max-width:440px;margin:0 auto}
+.transition-text strong{color:var(--accent-dark);font-weight:700}
+
+/* FORM */
+.form-card{background:var(--bg-white);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden}
+.form-header{background:linear-gradient(135deg,var(--bg-hero),var(--bg-hero-dark));padding:18px 22px;text-align:center}
+.form-header-icon{width:40px;height:40px;margin:0 auto 8px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.form-header-icon i{width:20px;height:20px}
+.form-header h2{font-size:1.1rem;font-weight:700;color:var(--text-on-dark);margin-bottom:4px}
+.form-header p{font-size:.8rem;color:var(--text-on-dark-muted);line-height:1.5}
+.form-header p strong{color:#fff}
+.form-body{padding:18px 22px}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:.72rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.form-input{width:100%;padding:11px 14px;background:var(--bg-body);border:2px solid var(--border);border-radius:var(--radius-xs);font-family:var(--font);font-size:.9rem;color:var(--text-dark);transition:all .3s ease;outline:none}
+.form-input::placeholder{color:var(--text-muted)}
+.form-input:focus{border-color:var(--accent);background:var(--bg-white);box-shadow:0 0 0 3px var(--accent-bg)}
+.form-input.error{border-color:#dc3545;box-shadow:0 0 0 3px rgba(220,53,69,0.08)}
+.error-text{font-size:.72rem;color:#dc3545;margin-top:4px;display:none;font-weight:500}
+.error-text.visible{display:block}
+.form-privacy{text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:10px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:5px}
+.form-privacy i{width:12px;height:12px}
+
+/* CONFIRMATION */
+.confirmation-card{background:var(--bg-white);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;text-align:center}
+.confirmation-header{background:linear-gradient(135deg,var(--success),#2d6631);padding:20px 22px}
+.confirmation-icon{width:48px;height:48px;margin:0 auto 10px;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;animation:scaleIn .5s cubic-bezier(.34,1.56,.64,1) forwards}
+.confirmation-icon i{width:24px;height:24px}
+@keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.confirmation-header h2{font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:4px}
+.confirmation-header p{font-size:.82rem;color:rgba(255,255,255,0.8);line-height:1.5}
+.confirmation-body{padding:18px 22px}
+.next-steps{text-align:left;margin-bottom:14px}
+.next-steps h3{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-dark);margin-bottom:10px}
+.step-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.step-item:last-child{margin-bottom:0}
+.step-number{width:24px;height:24px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0}
+.step-text{font-size:.8rem;color:var(--text-body);line-height:1.4;padding-top:2px}
+.step-text strong{color:var(--text-dark)}
+.selection-note{font-size:.78rem;color:var(--text-secondary);line-height:1.5;padding:10px 14px;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 var(--radius-xs) var(--radius-xs) 0;text-align:left}
+.spinner{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-primary.loading .btn-text,.btn-primary.loading i{display:none}
+.btn-primary.loading .spinner{display:block}
+@media(max-width:480px){
+.content-area{padding:8px 12px 8px}
+.welcome-header{padding:14px 16px 12px}.welcome-badge{margin-bottom:6px;font-size:.6rem}
+.welcome-title{font-size:1.1rem;margin-bottom:6px}.welcome-subtitle{font-size:.76rem}
+.methodology-section{padding:10px 16px}.methodology-text{font-size:.74rem;line-height:1.45}
+.proof-section{padding:8px 16px;gap:6px}.proof-badge{padding:4px 8px;font-size:.62rem}
+.benefits-section{padding:10px 16px}.benefits-grid{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.benefit-card{padding:6px 8px;gap:6px}.benefit-icon{width:24px;height:24px}.benefit-icon i{width:12px;height:12px}
+.benefit-text{font-size:.7rem}.btn-primary{padding:12px 20px;font-size:.82rem}
+.time-hint{margin-top:6px;font-size:.68rem}.spots-counter{margin-top:6px;font-size:.62rem}
+.question-card{padding:16px 14px}.option-btn{padding:8px 10px;font-size:.78rem;gap:8px}
+.option-icon{width:28px;height:28px}.option-icon i{width:14px;height:14px}
+.form-header{padding:14px 16px}.form-header h2{font-size:1rem}.form-header p{font-size:.74rem}
+.form-body{padding:14px 16px}.form-group{margin-bottom:10px}.form-input{padding:10px 12px;font-size:.85rem}
+.confirmation-header{padding:16px}.confirmation-body{padding:14px 16px}
+.hero-section{padding:8px 14px 6px}.hero-logo{height:24px}.hero-tagline{font-size:.68rem;margin-top:2px}
+}
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+<div class="hero-section">
+    <img src="logo.png" alt="Economia Viva" class="hero-logo">
+</div>
+<div class="progress-container" id="progressContainer">
+    <div class="progress-info">
+        <span class="progress-step" id="progressStep">Pergunta 1 de 7</span>
+        <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+<div class="content-area"><div class="content-wrapper">
+
+<!-- WELCOME -->
+<div class="screen active" id="screen-welcome"><div class="welcome-card">
+<div class="welcome-header">
+    <div class="welcome-badge"><i data-lucide="target"></i> Programa 1.000 Empresas</div>
+    <h1 class="welcome-title">Nós queremos ajudar <span class="hl">o seu negócio.</span></h1>
+    <p class="welcome-subtitle">A Economia Viva está selecionando <strong>1.000 empresas</strong> para receber orientação gratuita com nossos consultores. Faça sua pré-aplicação agora.</p>
+</div>
+<div class="methodology-section">
+    <div class="methodology-label">O que é a Economia Viva?</div>
+    <p class="methodology-text">A <strong>Economia Viva</strong> é uma escola de pensamento e prática econômico-social que ajuda empresários a <strong>alinhar propósito, prosperidade e gestão regenerativa</strong> em seus negócios. Com mais de <strong>20 anos de experiência</strong>, nossa metodologia já transformou organizações de diferentes portes — provando que é possível crescer com sentido, ter finanças saudáveis e liderar de forma humana e eficiente.</p>
+</div>
+<div class="proof-section">
+    <div class="proof-badge"><i data-lucide="graduation-cap"></i> Certificação MEC</div>
+    <div class="proof-badge"><i data-lucide="book-open"></i> Case INSEAD + Harvard</div>
+    <div class="proof-badge"><i data-lucide="award"></i> +20 anos de método</div>
+</div>
+<div class="benefits-section">
+    <div class="benefits-grid">
+        <div class="benefit-card"><span class="benefit-icon"><i data-lucide="check"></i></span><span class="benefit-text">Consultoria inicial gratuita</span></div>
+        <div class="benefit-card"><span class="benefit-icon"><i data-lucide="wrench"></i></span><span class="benefit-text">Ferramentas práticas</span></div>
+        <div class="benefit-card"><span class="benefit-icon"><i data-lucide="user"></i></span><span class="benefit-text">Orientação personalizada</span></div>
+        <div class="benefit-card"><span class="benefit-icon"><i data-lucide="bar-chart-3"></i></span><span class="benefit-text">Diagnóstico do negócio</span></div>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()"><span class="btn-text">Começar minha aplicação</span><i data-lucide="arrow-right"></i></button>
+    <p class="time-hint"><i data-lucide="clock"></i> Leva menos de 2 minutos</p>
+    <div style="text-align:center"><span class="spots-counter"><span class="spots-dot"></span>Vagas limitadas — pré-seleção aberta</span></div>
+</div>
+</div></div>
+
+<!-- Q1 -->
+<div class="screen" id="screen-q1"><div class="question-card">
+<div class="question-number">Pergunta 1 de 7</div>
+<h2 class="question-title">Como você descreveria o momento atual do seu negócio?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(1,this,'Estou no início e buscando direção')"><span class="option-icon"><i data-lucide="compass"></i></span><span class="option-text">Estou no início e buscando direção</span></button>
+    <button class="option-btn" onclick="selectOption(1,this,'Meu negócio funciona, mas sinto que pode mais')"><span class="option-icon"><i data-lucide="zap"></i></span><span class="option-text">Meu negócio funciona, mas sinto que pode mais</span></button>
+    <button class="option-btn" onclick="selectOption(1,this,'Estou enfrentando dificuldades sérias')"><span class="option-icon"><i data-lucide="waves"></i></span><span class="option-text">Estou enfrentando dificuldades sérias (dívidas, queda de faturamento)</span></button>
+    <button class="option-btn" onclick="selectOption(1,this,'Estou em fase de reinvenção ou transição')"><span class="option-icon"><i data-lucide="refresh-cw"></i></span><span class="option-text">Estou em fase de reinvenção ou transição</span></button>
+</div>
+</div></div>
+
+<!-- Q2 -->
+<div class="screen" id="screen-q2"><div class="question-card">
+<div class="question-number">Pergunta 2 de 7</div>
+<h2 class="question-title">Qual o maior desafio que você enfrenta hoje?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(2,this,'Faturamento e fluxo de caixa')"><span class="option-icon"><i data-lucide="dollar-sign"></i></span><span class="option-text">Faturamento e fluxo de caixa</span></button>
+    <button class="option-btn" onclick="selectOption(2,this,'Falta de clareza sobre o propósito')"><span class="option-icon"><i data-lucide="target"></i></span><span class="option-text">Falta de clareza sobre o propósito do negócio</span></button>
+    <button class="option-btn" onclick="selectOption(2,this,'Gestão de equipe e liderança')"><span class="option-icon"><i data-lucide="users"></i></span><span class="option-text">Gestão de equipe e liderança</span></button>
+    <button class="option-btn" onclick="selectOption(2,this,'Organização financeira e dívidas')"><span class="option-icon"><i data-lucide="file-text"></i></span><span class="option-text">Organização financeira e dívidas</span></button>
+    <button class="option-btn" onclick="selectOption(2,this,'Esgotamento, sem energia para continuar')"><span class="option-icon"><i data-lucide="battery-low"></i></span><span class="option-text">Estou esgotado(a), sem energia para continuar</span></button>
+</div>
+</div></div>
+
+<!-- Q3 -->
+<div class="screen" id="screen-q3"><div class="question-card">
+<div class="question-number">Pergunta 3 de 7</div>
+<h2 class="question-title">Há quanto tempo você empreende ou lidera seu negócio?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(3,this,'Menos de 1 ano')"><span class="option-icon"><i data-lucide="sprout"></i></span><span class="option-text">Menos de 1 ano</span></button>
+    <button class="option-btn" onclick="selectOption(3,this,'1 a 3 anos')"><span class="option-icon"><i data-lucide="leaf"></i></span><span class="option-text">1 a 3 anos</span></button>
+    <button class="option-btn" onclick="selectOption(3,this,'3 a 10 anos')"><span class="option-icon"><i data-lucide="tree-deciduous"></i></span><span class="option-text">3 a 10 anos</span></button>
+    <button class="option-btn" onclick="selectOption(3,this,'Mais de 10 anos')"><span class="option-icon"><i data-lucide="landmark"></i></span><span class="option-text">Mais de 10 anos</span></button>
+</div>
+</div></div>
+
+<!-- Q4 -->
+<div class="screen" id="screen-q4"><div class="question-card">
+<div class="question-number">Pergunta 4 de 7</div>
+<h2 class="question-title">Em qual faixa de faturamento mensal seu negócio se encontra?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(4,this,'Até R$ 10 mil/mês')"><span class="option-icon"><i data-lucide="trending-up"></i></span><span class="option-text">Até R$ 10 mil/mês</span></button>
+    <button class="option-btn" onclick="selectOption(4,this,'R$ 10 mil a R$ 50 mil/mês')"><span class="option-icon"><i data-lucide="bar-chart-2"></i></span><span class="option-text">R$ 10 mil a R$ 50 mil/mês</span></button>
+    <button class="option-btn" onclick="selectOption(4,this,'R$ 50 mil a R$ 200 mil/mês')"><span class="option-icon"><i data-lucide="bar-chart-3"></i></span><span class="option-text">R$ 50 mil a R$ 200 mil/mês</span></button>
+    <button class="option-btn" onclick="selectOption(4,this,'Acima de R$ 200 mil/mês')"><span class="option-icon"><i data-lucide="rocket"></i></span><span class="option-text">Acima de R$ 200 mil/mês</span></button>
+    <button class="option-btn" onclick="selectOption(4,this,'Prefiro não dizer agora')"><span class="option-icon"><i data-lucide="eye-off"></i></span><span class="option-text">Prefiro não dizer agora</span></button>
+</div>
+</div></div>
+
+<!-- Q5 -->
+<div class="screen" id="screen-q5"><div class="question-card">
+<div class="question-number">Pergunta 5 de 7</div>
+<h2 class="question-title">Você sente que seu negócio está alinhado com o que você acredita e valoriza na vida?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(5,this,'Sim, totalmente')"><span class="option-icon"><i data-lucide="check-circle"></i></span><span class="option-text">Sim, totalmente</span></button>
+    <button class="option-btn" onclick="selectOption(5,this,'Em parte, mas algo está desconectado')"><span class="option-icon"><i data-lucide="unplug"></i></span><span class="option-text">Em parte, mas algo está desconectado</span></button>
+    <button class="option-btn" onclick="selectOption(5,this,'Não, sinto que perdi o sentido')"><span class="option-icon"><i data-lucide="x-circle"></i></span><span class="option-text">Não, sinto que perdi o sentido</span></button>
+    <button class="option-btn" onclick="selectOption(5,this,'Nunca parei para pensar nisso')"><span class="option-icon"><i data-lucide="help-circle"></i></span><span class="option-text">Nunca parei para pensar nisso</span></button>
+</div>
+</div></div>
+
+<!-- Q6 -->
+<div class="screen" id="screen-q6"><div class="question-card">
+<div class="question-number">Pergunta 6 de 7</div>
+<h2 class="question-title">O que você estaria disposto(a) a fazer para transformar seu negócio?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(6,this,'Aprender novas metodologias e ferramentas')"><span class="option-icon"><i data-lucide="book-open"></i></span><span class="option-text">Aprender novas metodologias e ferramentas</span></button>
+    <button class="option-btn" onclick="selectOption(6,this,'Receber mentoria e orientação personalizada')"><span class="option-icon"><i data-lucide="handshake"></i></span><span class="option-text">Receber mentoria e orientação personalizada</span></button>
+    <button class="option-btn" onclick="selectOption(6,this,'Rever meu modelo de gestão e operação')"><span class="option-icon"><i data-lucide="settings"></i></span><span class="option-text">Rever meu modelo de gestão e operação</span></button>
+    <button class="option-btn" onclick="selectOption(6,this,'Tudo que for necessário — quero uma mudança real')"><span class="option-icon"><i data-lucide="sparkles"></i></span><span class="option-text">Tudo que for necessário — quero uma mudança real</span></button>
+</div>
+</div></div>
+
+<!-- Q7 -->
+<div class="screen" id="screen-q7"><div class="question-card">
+<div class="question-number">Pergunta 7 de 7</div>
+<h2 class="question-title">Se você pudesse mudar UMA coisa no seu negócio nos próximos 6 meses, o que seria?</h2>
+<div class="options-grid">
+    <button class="option-btn" onclick="selectOption(7,this,'Ter finanças organizadas e saudáveis')"><span class="option-icon"><i data-lucide="wallet"></i></span><span class="option-text">Ter finanças organizadas e saudáveis</span></button>
+    <button class="option-btn" onclick="selectOption(7,this,'Encontrar (ou reencontrar) o propósito')"><span class="option-icon"><i data-lucide="compass"></i></span><span class="option-text">Encontrar (ou reencontrar) o propósito</span></button>
+    <button class="option-btn" onclick="selectOption(7,this,'Ter uma equipe engajada e autônoma')"><span class="option-icon"><i data-lucide="users"></i></span><span class="option-text">Ter uma equipe engajada e autônoma</span></button>
+    <button class="option-btn" onclick="selectOption(7,this,'Aumentar faturamento com sustentabilidade')"><span class="option-icon"><i data-lucide="trending-up"></i></span><span class="option-text">Aumentar faturamento com sustentabilidade</span></button>
+    <button class="option-btn" onclick="selectOption(7,this,'Mais equilíbrio entre vida pessoal e trabalho')"><span class="option-icon"><i data-lucide="scale"></i></span><span class="option-text">Ter mais equilíbrio entre vida pessoal e trabalho</span></button>
+</div>
+</div></div>
+
+<!-- TRANSITION -->
+<div class="transition-message" id="transitionMessage">
+    <div class="transition-icon" id="transitionIcon"><i data-lucide="heart"></i></div>
+    <p class="transition-text" id="transitionText"></p>
+</div>
+
+<!-- FORM -->
+<div class="screen" id="screen-form"><div class="form-card">
+<div class="form-header">
+    <div class="form-header-icon"><i data-lucide="party-popper"></i></div>
+    <h2>Que bom que você chegou até aqui!</h2>
+    <p>Sua pré-aplicação está quase completa. Preencha seus dados para que um dos nossos consultores entre em contato — <strong>sem custo e sem compromisso.</strong></p>
+</div>
+<div class="form-body">
+    <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+            <label class="form-label" for="inputName">Seu nome</label>
+            <input class="form-input" type="text" id="inputName" placeholder="Como podemos te chamar?" required autocomplete="name">
+            <p class="error-text" id="errorName">Por favor, informe seu nome</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="inputWhatsapp">WhatsApp</label>
+            <input class="form-input" type="tel" id="inputWhatsapp" placeholder="(00) 00000-0000" required autocomplete="tel">
+            <p class="error-text" id="errorWhatsapp">Informe um WhatsApp válido</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="inputInstagram">Instagram (seu ou do negócio)</label>
+            <input class="form-input" type="text" id="inputInstagram" placeholder="@seu_perfil" required>
+            <p class="error-text" id="errorInstagram">Informe seu Instagram</p>
+        </div>
+        <button class="btn-primary" type="submit" id="submitBtn"><span class="btn-text">Enviar minha aplicação</span><i data-lucide="arrow-right"></i><div class="spinner"></div></button>
+        <p class="form-privacy"><i data-lucide="lock"></i> Seus dados estão seguros e serão usados apenas para contato sobre o programa.</p>
+    </form>
+</div>
+</div></div>
+
+<!-- CONFIRMATION -->
+<div class="screen" id="screen-confirmation"><div class="confirmation-card">
+<div class="confirmation-header">
+    <div class="confirmation-icon"><i data-lucide="check"></i></div>
+    <h2>Sua aplicação foi recebida!</h2>
+    <p>Obrigado por participar deste processo seletivo. Estamos felizes por ter você conosco nessa jornada.</p>
+</div>
+<div class="confirmation-body">
+    <div class="next-steps">
+        <h3>Próximos passos</h3>
+        <div class="step-item"><div class="step-number">1</div><p class="step-text">Este é um <strong>processo seletivo exclusivo</strong> e sua aplicação está sendo considerada pela nossa equipe.</p></div>
+        <div class="step-item"><div class="step-number">2</div><p class="step-text">Em breve, daremos notícias sobre os <strong>próximos passos</strong> do programa e como podemos ajudar o seu negócio.</p></div>
+        <div class="step-item"><div class="step-number">3</div><p class="step-text">Enquanto isso, siga a <strong>Economia Viva no Instagram</strong> para entender mais sobre o nosso modelo e o que podemos fazer por você.</p></div>
+    </div>
+    <a href="https://instagram.com/economiaviva" target="_blank" rel="noopener" class="btn-primary" style="text-decoration:none;margin-bottom:16px"><span class="btn-text">Seguir @economiaviva no Instagram</span><i data-lucide="instagram"></i></a>
+    <p class="selection-note">Estamos selecionando apenas <strong>1.000 empresas</strong> para participar deste programa. Sua aplicação será avaliada com atenção e cuidado.</p>
+</div>
+</div></div>
+
+</div></div>
+</div>
+
+<script>
+const quizData={answers:{},contact:{}};
+let currentQuestion=0;
+const totalQuestions=7;
+const transitionMessages={
+    1:{icon:'heart',text:'Obrigado por compartilhar. <strong>Isso nos ajuda a entender como apoiar você.</strong>'},
+    2:{icon:'sun',text:'Muitos empresários passam por isso. <strong>Existe caminho — e você não está sozinho(a).</strong>'},
+    3:{icon:'tree-deciduous',text:'Sua experiência é valiosa. <strong>Vamos trabalhar com ela.</strong>'},
+    4:{icon:'bar-chart-2',text:'Entender seus números é o <strong>primeiro passo para mudá-los.</strong>'},
+    5:{icon:'sparkles',text:'Alinhar propósito e negócio é transformador. <strong>É nisso que acreditamos.</strong>'},
+    6:{icon:'muscle',text:'Sua disposição já diz muito. <strong>Você está no caminho certo.</strong>'},
+    7:{icon:'rocket',text:'Excelente! <strong>Agora só falta um passo.</strong>'}
+};
+
+function startQuiz(){
+    const w=document.getElementById('screen-welcome');
+    w.classList.add('exiting');
+    setTimeout(()=>{
+        w.classList.remove('active','exiting');
+        document.getElementById('progressContainer').classList.add('visible');
+        showScreen('screen-q1');
+        currentQuestion=1;
+        updateProgress();
+    },250);
+}
+
+function selectOption(q,btn,answer){
+    btn.parentElement.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    quizData.answers['q'+q]=answer;
+    saveProgress();
+    setTimeout(()=>showTransition(q),400);
+}
+
+function showTransition(q){
+    const s=document.getElementById('screen-q'+q);
+    s.classList.add('exiting');
+    setTimeout(()=>{
+        s.classList.remove('active','exiting');
+        const msg=transitionMessages[q];
+        const el=document.getElementById('transitionMessage');
+        const iconEl=document.getElementById('transitionIcon');
+        iconEl.innerHTML='<i data-lucide="'+msg.icon+'"></i>';
+        lucide.createIcons({nodes:[iconEl]});
+        document.getElementById('transitionText').innerHTML=msg.text;
+        el.classList.add('active');
+        el.style.animation='fadeIn .4s ease forwards';
+        setTimeout(()=>{
+            el.classList.remove('active');
+            el.style.animation='';
+            currentQuestion=q+1;
+            if(q<totalQuestions){showScreen('screen-q'+(q+1));updateProgress();}
+            else{document.getElementById('progressContainer').classList.remove('visible');showScreen('screen-form');document.getElementById('inputName').focus();}
+        },1800);
+    },250);
+}
+
+function showScreen(id){
+    const s=document.getElementById(id);
+    s.classList.add('active');
+    s.style.animation='none';s.offsetHeight;s.style.animation='';
+    lucide.createIcons({nodes:[s]});
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(){
+    const p=Math.round(((currentQuestion-1)/totalQuestions)*100);
+    document.getElementById('progressFill').style.width=p+'%';
+    document.getElementById('progressStep').textContent='Pergunta '+currentQuestion+' de '+totalQuestions;
+    document.getElementById('progressPercent').textContent=p+'%';
+}
+
+document.getElementById('inputWhatsapp').addEventListener('input',function(e){
+    let v=e.target.value.replace(/\D/g,'');
+    if(v.length>11)v=v.slice(0,11);
+    if(v.length>7)v='('+v.slice(0,2)+') '+v.slice(2,7)+'-'+v.slice(7);
+    else if(v.length>2)v='('+v.slice(0,2)+') '+v.slice(2);
+    else if(v.length>0)v='('+v;
+    e.target.value=v;
+});
+document.getElementById('inputInstagram').addEventListener('focus',function(e){if(!e.target.value)e.target.value='@';});
+document.getElementById('inputInstagram').addEventListener('input',function(e){if(!e.target.value.startsWith('@'))e.target.value='@'+e.target.value;});
+
+function validateForm(){
+    let v=true;
+    const n=document.getElementById('inputName'),w=document.getElementById('inputWhatsapp'),ig=document.getElementById('inputInstagram');
+    if(!n.value.trim()||n.value.trim().length<2){n.classList.add('error');document.getElementById('errorName').classList.add('visible');v=false;}else{n.classList.remove('error');document.getElementById('errorName').classList.remove('visible');}
+    if(w.value.replace(/\D/g,'').length<10){w.classList.add('error');document.getElementById('errorWhatsapp').classList.add('visible');v=false;}else{w.classList.remove('error');document.getElementById('errorWhatsapp').classList.remove('visible');}
+    if(!ig.value.trim()||ig.value.trim().length<2){ig.classList.add('error');document.getElementById('errorInstagram').classList.add('visible');v=false;}else{ig.classList.remove('error');document.getElementById('errorInstagram').classList.remove('visible');}
+    return v;
+}
+
+function submitForm(e){
+    e.preventDefault();
+    if(!validateForm())return;
+    const btn=document.getElementById('submitBtn');
+    btn.classList.add('loading');btn.disabled=true;
+    quizData.contact={name:document.getElementById('inputName').value.trim(),whatsapp:document.getElementById('inputWhatsapp').value.trim(),instagram:document.getElementById('inputInstagram').value.trim()};
+    quizData.timestamp=new Date().toISOString();
+    saveProgress();
+    fetch('/api/quiz',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            name:quizData.contact.name,
+            whatsapp:quizData.contact.whatsapp,
+            instagram:quizData.contact.instagram,
+            answers:quizData.answers
+        })
+    })
+    .then(r=>{if(!r.ok)throw new Error('Erro');return r.json();})
+    .then(()=>{
+        btn.classList.remove('loading');
+        fireLeadConversion(quizData.contact);
+        const f=document.getElementById('screen-form');
+        f.classList.add('exiting');
+        setTimeout(()=>{f.classList.remove('active','exiting');showScreen('screen-confirmation');},250);
+    })
+    .catch(()=>{
+        btn.classList.remove('loading');btn.disabled=false;
+        alert('Erro ao enviar. Verifique sua conexão e tente novamente.');
+    });
+}
+
+function saveProgress(){try{localStorage.setItem('ev_quiz_1000',JSON.stringify(quizData));}catch(e){}}
+
+// --- Tracking ---
+function initTracking(){
+    fetch('/api/tracking').then(r=>r.json()).then(cfg=>{
+        // Meta Pixel (client-side)
+        if(cfg.meta_pixel_id){
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init',cfg.meta_pixel_id);
+            fbq('track','PageView');
+        }
+        // Google Analytics
+        if(cfg.ga_measurement_id){
+            const s=document.createElement('script');
+            s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+cfg.ga_measurement_id;
+            document.head.appendChild(s);
+            window.dataLayer=window.dataLayer||[];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag=gtag;
+            gtag('js',new Date());
+            gtag('config',cfg.ga_measurement_id);
+        }
+    }).catch(()=>{});
+}
+
+function fireLeadConversion(userData){
+    // Client-side Meta Pixel
+    if(window.fbq) fbq('track','Lead',{content_name:'Quiz 1000 Empresas'});
+    // Server-side Meta Conversions API (token never exposed)
+    fetch('/api/track',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({event_name:'Lead',user_data:{phone:userData.whatsapp,name:userData.name}})
+    }).catch(()=>{});
+    // Google Analytics
+    if(window.gtag) gtag('event','generate_lead',{event_category:'Quiz',event_label:'1000 Empresas'});
+}
+
+document.addEventListener('DOMContentLoaded',()=>{lucide.createIcons();initTracking();});
+</script>
+</body>
+</html>

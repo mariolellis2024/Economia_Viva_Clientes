@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — 1000 Empresas | Economia Viva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0f1117;--bg-card:#1a1d27;--bg-card-hover:#22263a;--bg-input:#262a3a;
+--accent:#b89009;--accent-dark:#9a7808;--accent-light:#d4a916;
+--text:#e8e8ed;--text-secondary:#8b8fa3;--text-muted:#5a5e72;
+--border:#2a2e3f;--success:#34d399;--danger:#f87171;
+--font:'Inter',sans-serif;--radius:12px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* LOGIN */
+.login-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
+.login-card{width:100%;max-width:380px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:40px 32px;text-align:center}
+.login-logo{height:32px;margin:0 auto 24px;display:block}
+.login-title{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:.82rem;color:var(--text-secondary);margin-bottom:24px}
+.login-input{width:100%;padding:12px 16px;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:.9rem;outline:none;transition:border .2s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font);font-size:.9rem;font-weight:700;cursor:pointer;margin-top:12px;transition:background .2s}
+.login-btn:hover{background:var(--accent-dark)}
+.login-error{color:var(--danger);font-size:.78rem;margin-top:10px;display:none}
+
+/* LAYOUT */
+.app{display:none;height:100vh;flex-direction:column}
+.app.show{display:flex}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-logo{height:22px}
+.topbar-title{font-size:.85rem;font-weight:600;color:var(--text-secondary)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-badge{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg-input);border-radius:100px;font-size:.72rem;font-weight:600;color:var(--accent-light)}
+.topbar-badge .dot{width:6px;height:6px;background:var(--success);border-radius:50%}
+.btn-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);cursor:pointer;transition:all .2s}
+.btn-icon:hover{color:var(--text);border-color:var(--text-muted)}
+.btn-icon i{width:16px;height:16px}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:20px 24px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;transition:border-color .2s}
+.stat-card:hover{border-color:var(--accent-dark)}
+.stat-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px}
+.stat-value{font-size:1.6rem;font-weight:800;color:var(--text)}
+.stat-sub{font-size:.72rem;color:var(--text-secondary);margin-top:2px}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px}
+.search-box i{width:16px;height:16px;color:var(--text-muted);flex-shrink:0}
+.search-box input{flex:1;background:none;border:none;color:var(--text);font-family:var(--font);font-size:.85rem;outline:none}
+.search-box input::placeholder{color:var(--text-muted)}
+.filter-select{padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:.8rem;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.filter-select option{background:var(--bg-card)}
+.btn-sm{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-family:var(--font);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-sm:hover{color:var(--text);border-color:var(--accent)}
+.btn-sm i{width:14px;height:14px}
+
+/* TABLE */
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+thead{position:sticky;top:0;z-index:2}
+th{padding:10px 14px;background:var(--bg-input);font-weight:700;text-transform:uppercase;letter-spacing:.8px;font-size:.68rem;color:var(--text-muted);text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text-secondary);max-width:200px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-card-hover)}
+td.name{color:var(--text);font-weight:600;white-space:nowrap}
+.link-wa{color:var(--success);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.link-wa:hover{text-decoration:underline}
+.link-wa i{width:13px;height:13px}
+.link-ig{color:#c084fc;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.link-ig:hover{text-decoration:underline}
+.link-ig i{width:13px;height:13px}
+.answer-tag{display:inline-block;padding:3px 8px;background:var(--bg-input);border-radius:6px;font-size:.72rem;color:var(--text-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.date-cell{white-space:nowrap;font-size:.72rem;color:var(--text-muted)}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-muted)}
+.empty-state i{width:32px;height:32px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:.85rem}
+
+.count-badge{font-size:.72rem;color:var(--text-muted);font-weight:500;padding:8px 0}
+
+/* SETTINGS PANEL */
+.settings-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:none}
+.settings-panel.open{display:block}
+.settings-title{font-size:.82rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--accent-light)}
+.settings-title i{width:16px;height:16px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.settings-field{display:flex;flex-direction:column;gap:4px}
+.settings-field.full{grid-column:1/-1}
+.settings-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted)}
+.settings-input{padding:9px 14px;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:.82rem;outline:none;transition:border .2s}
+.settings-input:focus{border-color:var(--accent)}
+.settings-input::placeholder{color:var(--text-muted)}
+.settings-actions{display:flex;gap:10px;margin-top:16px}
+.settings-save{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;transition:background .2s}
+.settings-save:hover{background:var(--accent-dark)}
+.settings-status{font-size:.75rem;color:var(--success);align-self:center;display:none}
+
+@media(max-width:768px){
+.stats-grid{grid-template-columns:1fr}
+.toolbar{flex-direction:column;align-items:stretch}
+.search-box{min-width:unset}
+.main{padding:14px}
+.topbar{padding:10px 14px}
+}
+    </style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+        <img src="logo.png" alt="Economia Viva" class="login-logo">
+        <h2 class="login-title">Painel Administrativo</h2>
+        <p class="login-sub">Digite a senha de administrador para acessar</p>
+        <input type="password" class="login-input" id="loginInput" placeholder="Senha de acesso" autofocus>
+        <button class="login-btn" onclick="doLogin()">Entrar</button>
+        <p class="login-error" id="loginError">Senha incorreta</p>
+    </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+    <div class="topbar">
+        <div class="topbar-left">
+            <img src="logo.png" alt="EV" class="topbar-logo">
+            <span class="topbar-title">Admin — 1000 Empresas</span>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-badge"><span class="dot"></span>Online</span>
+            <button class="btn-icon" onclick="toggleSettings()" title="Configurações"><i data-lucide="settings"></i></button>
+            <button class="btn-icon" onclick="loadData()" title="Atualizar"><i data-lucide="refresh-cw"></i></button>
+            <button class="btn-icon" onclick="doLogout()" title="Sair"><i data-lucide="log-out"></i></button>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- SETTINGS -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-title"><i data-lucide="zap"></i>Integrações de Tracking</div>
+            <div class="settings-grid">
+                <div class="settings-field">
+                    <label class="settings-label">Meta Pixel ID</label>
+                    <input class="settings-input" id="setPixelId" placeholder="Ex: 123456789012345">
+                </div>
+                <div class="settings-field">
+                    <label class="settings-label">Meta Conversions API Token</label>
+                    <input class="settings-input" id="setApiToken" type="password" placeholder="Token de acesso">
+                </div>
+                <div class="settings-field">
+                    <label class="settings-label">Google Analytics (Measurement ID)</label>
+                    <input class="settings-input" id="setGaId" placeholder="Ex: G-XXXXXXXXXX">
+                </div>
+            </div>
+            <div class="settings-actions">
+                <button class="settings-save" onclick="saveSettings()">Salvar configurações</button>
+                <span class="settings-status" id="settingsStatus">✓ Salvo!</span>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total de leads</div>
+                <div class="stat-value" id="statTotal">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Hoje</div>
+                <div class="stat-value" id="statToday">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Últimos 7 dias</div>
+                <div class="stat-value" id="statWeek">—</div>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por nome, WhatsApp ou Instagram..." oninput="renderTable()">
+            </div>
+            <select class="filter-select" id="filterQ" onchange="renderTable()">
+                <option value="">Todas as perguntas</option>
+                <option value="q1">Q1 — Momento do negócio</option>
+                <option value="q2">Q2 — Maior desafio</option>
+                <option value="q3">Q3 — Tempo de empreendedor</option>
+                <option value="q4">Q4 — Faturamento</option>
+                <option value="q5">Q5 — Alinhamento propósito</option>
+                <option value="q6">Q6 — Disposição</option>
+                <option value="q7">Q7 — Mudança desejada</option>
+            </select>
+            <select class="filter-select" id="filterAnswer" onchange="renderTable()" style="display:none">
+                <option value="">Todas as respostas</option>
+            </select>
+            <button class="btn-sm" onclick="exportCSV()"><i data-lucide="download"></i>Exportar CSV</button>
+        </div>
+
+        <div class="count-badge" id="countBadge"></div>
+
+        <!-- TABLE -->
+        <div class="table-wrap">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>WhatsApp</th>
+                            <th>Instagram</th>
+                            <th>Q1</th>
+                            <th>Q2</th>
+                            <th>Q3</th>
+                            <th>Q4</th>
+                            <th>Q5</th>
+                            <th>Q6</th>
+                            <th>Q7</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let adminPassword = '';
+let allLeads = [];
+
+// -- LOGIN --
+document.getElementById('loginInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogin(){
+    const pwd = document.getElementById('loginInput').value.trim();
+    if(!pwd){ document.getElementById('loginError').style.display='block'; return; }
+    // Validate password by making a test API call
+    fetch('/api/leads?password='+encodeURIComponent(pwd))
+        .then(r => {
+            if(!r.ok) throw new Error('bad');
+            return r.json();
+        })
+        .then(data => {
+            adminPassword = pwd;
+            sessionStorage.setItem('ev_admin_pwd', pwd);
+            allLeads = data;
+            document.getElementById('loginOverlay').style.display='none';
+            document.getElementById('app').classList.add('show');
+            lucide.createIcons();
+            loadStats();
+            loadSettings();
+            renderTable();
+        })
+        .catch(() => {
+            document.getElementById('loginError').style.display='block';
+        });
+}
+
+function doLogout(){
+    sessionStorage.removeItem('ev_admin_pwd');
+    location.reload();
+}
+
+// Auto-login from session
+(function(){
+    const saved = sessionStorage.getItem('ev_admin_pwd');
+    if(saved){
+        document.getElementById('loginInput').value = saved;
+        doLogin();
+    }
+    lucide.createIcons();
+})();
+
+// -- DATA --
+function apiFetch(url){
+    return fetch(url, { headers: { 'X-Admin-Password': adminPassword } }).then(r => {
+        if(!r.ok) throw new Error('Unauthorized');
+        return r.json();
+    });
+}
+
+function loadData(){
+    apiFetch('/api/leads').then(data => {
+        allLeads = data;
+        renderTable();
+    });
+    loadStats();
+}
+
+function loadStats(){
+    apiFetch('/api/stats').then(s => {
+        document.getElementById('statTotal').textContent = s.total;
+        document.getElementById('statToday').textContent = s.today;
+        document.getElementById('statWeek').textContent = s.thisWeek;
+    });
+}
+
+// -- FILTERS --
+document.getElementById('filterQ').addEventListener('change', function(){
+    const q = this.value;
+    const answerSel = document.getElementById('filterAnswer');
+    if(!q){ answerSel.style.display='none'; answerSel.value=''; return; }
+    // Build unique answers from data
+    const answers = [...new Set(allLeads.map(l => l[q]).filter(Boolean))];
+    answerSel.innerHTML = '<option value="">Todas as respostas</option>' +
+        answers.map(a => `<option value="${a}">${a}</option>`).join('');
+    answerSel.style.display='';
+});
+
+function getFiltered(){
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const q = document.getElementById('filterQ').value;
+    const ans = document.getElementById('filterAnswer').value;
+    return allLeads.filter(l => {
+        if(search){
+            const hay = (l.name+' '+l.whatsapp+' '+l.instagram).toLowerCase();
+            if(!hay.includes(search)) return false;
+        }
+        if(q && ans && l[q] !== ans) return false;
+        return true;
+    });
+}
+
+// -- RENDER --
+function renderTable(){
+    const filtered = getFiltered();
+    document.getElementById('countBadge').textContent = `Exibindo ${filtered.length} de ${allLeads.length} leads`;
+    const tbody = document.getElementById('tableBody');
+    if(!filtered.length){
+        tbody.innerHTML = `<tr><td colspan="12"><div class="empty-state"><i data-lucide="inbox"></i><p>Nenhum lead encontrado</p></div></td></tr>`;
+        lucide.createIcons({nodes:[tbody]});
+        return;
+    }
+    tbody.innerHTML = filtered.map((l,i) => {
+        const waNum = l.whatsapp.replace(/\D/g,'');
+        const waLink = `https://wa.me/55${waNum}`;
+        const igHandle = l.instagram.replace('@','');
+        const igLink = `https://instagram.com/${igHandle}`;
+        const date = new Date(l.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+        return `<tr>
+            <td>${l.id}</td>
+            <td class="name">${esc(l.name)}</td>
+            <td><a class="link-wa" href="${waLink}" target="_blank" rel="noopener"><i data-lucide="message-circle"></i>${esc(l.whatsapp)}</a></td>
+            <td><a class="link-ig" href="${igLink}" target="_blank" rel="noopener"><i data-lucide="instagram"></i>${esc(l.instagram)}</a></td>
+            <td><span class="answer-tag" title="${esc(l.q1||'')}">${esc(l.q1||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q2||'')}">${esc(l.q2||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q3||'')}">${esc(l.q3||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q4||'')}">${esc(l.q4||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q5||'')}">${esc(l.q5||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q6||'')}">${esc(l.q6||'—')}</span></td>
+            <td><span class="answer-tag" title="${esc(l.q7||'')}">${esc(l.q7||'—')}</span></td>
+            <td class="date-cell">${date}</td>
+        </tr>`;
+    }).join('');
+    lucide.createIcons({nodes:[tbody]});
+}
+
+function esc(s){ const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+
+// -- EXPORT CSV --
+function exportCSV(){
+    const filtered = getFiltered();
+    const headers = ['ID','Nome','WhatsApp','Instagram','Q1','Q2','Q3','Q4','Q5','Q6','Q7','Data'];
+    const rows = filtered.map(l => [
+        l.id, l.name, l.whatsapp, l.instagram,
+        l.q1||'', l.q2||'', l.q3||'', l.q4||'', l.q5||'', l.q6||'', l.q7||'',
+        new Date(l.created_at).toLocaleDateString('pt-BR')
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download=`leads_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+    URL.revokeObjectURL(url);
+}
+// -- SETTINGS --
+function toggleSettings(){
+    document.getElementById('settingsPanel').classList.toggle('open');
+}
+
+function loadSettings(){
+    apiFetch('/api/settings').then(s => {
+        document.getElementById('setPixelId').value = s.meta_pixel_id || '';
+        document.getElementById('setApiToken').value = s.meta_api_token || '';
+        document.getElementById('setGaId').value = s.ga_measurement_id || '';
+    });
+}
+
+function saveSettings(){
+    const data = {
+        meta_pixel_id: document.getElementById('setPixelId').value.trim(),
+        meta_api_token: document.getElementById('setApiToken').value.trim(),
+        ga_measurement_id: document.getElementById('setGaId').value.trim(),
+    };
+    fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPassword },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(() => {
+        const st = document.getElementById('settingsStatus');
+        st.style.display = 'inline';
+        setTimeout(() => { st.style.display = 'none'; }, 2500);
+    });
+}
+</script>
+</body>
+</html>
