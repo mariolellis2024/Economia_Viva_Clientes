@@ -4,14 +4,11 @@
       "type": "app",
       "data": {
         "serviceName": "quiz",
+        "env": "DATABASE_URL=postgres://postgres:Ev2026Pg5ecure@$(PROJECT_NAME)_db:5432/$(PROJECT_NAME)\nADMIN_PASSWORD=Free2026@\nPORT=3000",
         "source": {
-          "type": "github",
-          "owner": "mariolellis2024",
-          "repo": "Economia_Viva_Clientes",
-          "ref": "main",
-          "path": "/"
+          "type": "image",
+          "image": "ghcr.io/mariolellis2024/economia_viva_clientes:latest"
         },
-        "env": "DATABASE_URL=postgres://postgres:Ev2026Pg$ecure@$(PROJECT_NAME)_db:5432/$(PROJECT_NAME)\nADMIN_PASSWORD=Free2026@\nPORT=3000",
         "domains": [
           {
             "host": "projeto.economiaviva.com.br",
@@ -23,8 +20,9 @@
     {
       "type": "postgres",
       "data": {
+        "image": "postgres:16",
         "serviceName": "db",
-        "password": "Ev2026Pg$ecure"
+        "password": "Ev2026Pg5ecure"
       }
     }
   ]
